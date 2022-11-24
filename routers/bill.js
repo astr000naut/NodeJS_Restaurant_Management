@@ -35,7 +35,6 @@ router.post('/create', async (req, res) => {
 
 router.post('/adddish', async (req, res) => {
     try {
-         console.log(req.body);
         req.body.dishes.forEach(async element => {
             await HoadonMon.create({
                 soluongmon: element.soluong,
@@ -81,7 +80,6 @@ router.get('/get/:id', async (req, res) => {
 
 router.get('/getalldish', async (req, res) => {
     try {
-        console.log(req.query.id)
         let dish_list = []
         let hoadonmon = await HoadonMon.findAll({
             where: {
@@ -100,9 +98,6 @@ router.get('/getalldish', async (req, res) => {
             dish_list.push(dish)
         }
     
-
-        console.log(dish_list);
-
         res.send({
             status: "success",
             message: "Get bill's dishes success",

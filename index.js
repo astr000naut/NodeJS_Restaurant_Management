@@ -5,6 +5,8 @@ const billRouter = require('./routers/bill')
 const dishRouter = require('./routers/dish')
 const socket = require('socket.io')
 
+const dishHandler = require('./socketHandler/dishHandler')
+
 const app = express();
 const PORT = 3000
 require('dotenv').config()
@@ -27,14 +29,11 @@ const server = app.listen(PORT, ()  => {
 })
 
 const io = socket(server);
-var count = 0;
 
-io.on('connection', (socket) => {
-    console.log("New socket connection: ")
+const onConnection = (socket) => {
+    dishHandler(io, socket);
+    console.log("CLIENTS COUNT")
+    console.log(io.engine.clientsCount)
+}
 
-    socket.on('counter', () => {
-        ++ count;
-        io.emit('counter', count);
-    })
-    console.log(io.engine.clientsCount);
-})
+io.on('connection', onConnection)
