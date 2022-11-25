@@ -35,24 +35,32 @@ router.post('/create', async (req, res) => {
 
 router.post('/adddish', async (req, res) => {
     try {
-        req.body.dishes.forEach(async element => {
-            await HoadonMon.create({
-                soluongmon: element.soluong,
-                ghichu: element.ghichu,
-                MonId: element.id,
+        let dishes = req.body.dishes
+        console.log(dishes);
+        let hoadonmonId = []
+        for (let i = 0; i < dishes.length; ++ i) {
+            let hoadonmon = await HoadonMon.create({
+                soluongmon: dishes[i].soluong,
+                ghichu: dishes[i].ghichu,
+                trangthai: dishes[i].trangthai,
+                MonId: dishes[i].id,
                 HoadonId: req.body.bill_id
             })
-        });
+            await hoadonmon.save()
+            // BP DISH OBJECT
+            hoadonmonId.push(hoadonmon.id)
+            console.log(hoadonmonId)
+        }
         res.send({
             status: "success",
             message: "Add dish success",
-            bill: {}
+            hoadonmonId: hoadonmonId
         })
     } catch (error) {
         res.send({
             status: "fail",
             message: error,
-            bill: {}
+            hoadonmonId: {}
         })
     }
 })
@@ -80,35 +88,43 @@ router.get('/get/:id', async (req, res) => {
 
 router.get('/getalldish', async (req, res) => {
     try {
-        let dish_list = []
+        let bpdish_list = []
         let hoadonmon = await HoadonMon.findAll({
             where: {
                 HoadonId: req.query.id
             }
         })
+        let hoadon = await Hoadon.findOne({
+            where: {
+                id: req.query.id
+            }
+        })
         for (let i = 0; i < hoadonmon.length; ++ i) {
             let mon = await Mon.findOne({where: {id: hoadonmon[i].MonId}})
-            let dish = {
+            let bpdish = {
                 id: hoadonmon[i].MonId,
+                ban: hoadon.BanId,
                 ten: mon.ten,
                 gia: hoadonmon[i].soluongmon * mon.gia,
                 soluong: hoadonmon[i].soluongmon,
-                ghichu: hoadonmon[i].ghichu
+                ghichu: hoadonmon[i].ghichu,
+                trangthai: hoadonmon[i].trangthai,
+                billId: req.query.id
             }
-            dish_list.push(dish)
+            bpdish_list.push(bpdish)
         }
     
         res.send({
             status: "success",
-            message: "Get bill's dishes success",
-            dishes: dish_list
+            message: "Get bill's bp dishes success",
+            bp_dishes: bpdish_list
         })
 
     } catch (error) {
         res.send({
             status: "fail",
             message: error,
-            dishes: {}
+            bp_dishes: {}
         })
     }
 })

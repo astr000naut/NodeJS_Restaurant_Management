@@ -92,7 +92,8 @@ const Mon = sequelize.define('Mon', {
 
 const HoadonMon = sequelize.define('HoadonMon', {
     soluongmon: DataTypes.INTEGER,
-    ghichu: DataTypes.STRING
+    ghichu: DataTypes.STRING,
+    trangthai: DataTypes.STRING
 },{
     timestamps: true
 })
