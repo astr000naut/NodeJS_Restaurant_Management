@@ -90,6 +90,16 @@ const Mon = sequelize.define('Mon', {
     timestamps: false
 })
 
+const Khuvuc = sequelize.define('Khuvuc', {
+    khuvuc: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true
+    }
+}, {
+    timestamps: false
+})
+
 const HoadonMon = sequelize.define('HoadonMon', {
     soluongmon: DataTypes.INTEGER,
     ghichu: DataTypes.STRING,
@@ -107,7 +117,7 @@ Ban.hasMany(Hoadon)
 
 // sequelize.sync({force: true});
 
-module.exports = {Nhanvien, Hoadon, Ban, Mon, HoadonMon};
+module.exports = {Nhanvien, Hoadon, Ban, Mon, HoadonMon, Khuvuc};
     
    
     

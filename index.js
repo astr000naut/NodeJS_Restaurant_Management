@@ -3,6 +3,7 @@ const userRouter = require('./routers/user')
 const tableRouter = require('./routers/table')
 const billRouter = require('./routers/bill')
 const dishRouter = require('./routers/dish')
+const areaRouter = require('./routers/khuvuc')
 const socket = require('socket.io')
 
 const dishHandler = require('./socketHandler/dishHandler')
@@ -20,6 +21,7 @@ app.use('/user', userRouter)
 app.use('/table', tableRouter)
 app.use('/bill', billRouter)
 app.use('/dish', dishRouter)
+app.use('/area', areaRouter)
 
 
 

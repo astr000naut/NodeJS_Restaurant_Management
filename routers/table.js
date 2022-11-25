@@ -1,5 +1,5 @@
 const express = require('express')
-const {Ban} = require('../models/models')
+const {Ban, Khuvuc} = require('../models/models')
 
 
 const router = express.Router()
@@ -12,6 +12,18 @@ router.post('/create', async (req, res) => {
             socho: req.body.socho,
             hoadonht: req.body.hoadonht
         })
+        let khuvuc = await Khuvuc.findAll({
+            where: {
+                khuvuc: req.body.khuvuc
+            }
+            
+        })
+        if (khuvuc.length == 0) {
+            let khuvucmoi = await Khuvuc.create({
+                khuvuc: req.body.khuvuc
+            })
+            await khuvucmoi.save()
+        }
         await newTable.save();
         res.send({
             status: "success",
