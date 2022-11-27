@@ -23,6 +23,17 @@ module.exports = (io, socket) => {
         
     }
 
+    const dish_update_pv = (type, id, soluong, ghichu) => {
+        console.log("DISH UPDATE SOCKET RECEIVED")
+        console.log(type)
+        console.log(id)
+        console.log(soluong)
+        console.log(ghichu)
+        io.emit('dish_update_bep', type, id, soluong, ghichu)
+        console.log("EMITTED")
+    }
+
     socket.on('dish_list_pv', dish_list)
     socket.on('dish_state_change', dish_state_change)
+    socket.on('dish_update_pv', dish_update_pv)
 }

@@ -102,7 +102,7 @@ router.get('/getalldish', async (req, res) => {
         for (let i = 0; i < hoadonmon.length; ++ i) {
             let mon = await Mon.findOne({where: {id: hoadonmon[i].MonId}})
             let bpdish = {
-                id: hoadonmon[i].MonId,
+                id: hoadonmon[i].id,
                 ban: hoadon.BanId,
                 ten: mon.ten,
                 gia: hoadonmon[i].soluongmon * mon.gia,
@@ -125,6 +125,41 @@ router.get('/getalldish', async (req, res) => {
             status: "fail",
             message: error,
             bp_dishes: {}
+        })
+    }
+})
+
+router.put('/updatebpdish', async (req, res) => {
+    try {
+        
+        console.log(req.body)
+        let bp_dish = await HoadonMon.findOne({
+            where: {
+                id: req.body.bp_dish_id
+            }
+        })
+        if (req.body.type == "capnhat") {
+            bp_dish.soluongmon = req.body.soluong
+            bp_dish.ghichu = req.body.ghichu
+            await bp_dish.save()
+
+            res.send({
+                status: "success",
+                message: "Update bill's bp dish success"
+            })
+        }
+        if (req.body.type == "xoa") {
+            await bp_dish.destroy()
+            res.send({
+                status: "success",
+                message: "Delete bill's bp dish success"
+            })
+        }
+
+    } catch (error) {
+        res.send({
+            status: "fail",
+            message: error
         })
     }
 })
