@@ -1,5 +1,5 @@
 const express = require('express')
-const {Hoadon, Ban, HoadonMon, Mon} = require('../models/models')
+const {Hoadon, Ban, HoadonMon, Mon, Nhanvien} = require('../models/models')
 
 
 const router = express.Router()
@@ -9,7 +9,8 @@ router.post('/create', async (req, res) => {
         
         let newBill = await Hoadon.create({
            taoboi: req.body.taoboi,
-           BanId: req.body.ban
+           BanId: req.body.ban,
+           gia: 0
         })
         await newBill.save();
         let ban = await Ban.findOne({
@@ -38,6 +39,7 @@ router.post('/adddish', async (req, res) => {
         let dishes = req.body.dishes
         console.log(dishes);
         let hoadonmonId = []
+        let tong_gia = 0
         for (let i = 0; i < dishes.length; ++ i) {
             let hoadonmon = await HoadonMon.create({
                 soluongmon: dishes[i].soluong,
@@ -46,11 +48,17 @@ router.post('/adddish', async (req, res) => {
                 MonId: dishes[i].id,
                 HoadonId: req.body.bill_id
             })
+            tong_gia += dishes[i].gia
             await hoadonmon.save()
-            // BP DISH OBJECT
             hoadonmonId.push(hoadonmon.id)
-            console.log(hoadonmonId)
         }
+        let hoadon = await Hoadon.findOne({
+            where: {
+                id: req.body.bill_id
+            }
+        })
+        hoadon.gia = tong_gia
+        await hoadon.save()
         res.send({
             status: "success",
             message: "Add dish success",
@@ -64,17 +72,35 @@ router.post('/adddish', async (req, res) => {
         })
     }
 })
-router.get('/get/:id', async (req, res) => {
+router.get('/getone', async (req, res) => {
     try {
+        console.log("ABC")
+        console.log(req.query.id)
         let bill = await Hoadon.findOne({
             where: {
-                id: req.params.id
+                id: req.query.id
             }
         })
+        let nhanvientao = await Nhanvien.findOne({
+            where:{
+                id: bill.taoboi
+            }
+        })
+        let date = bill.createdAt
+        let dateObj = new Date(date)
+        dateObj.setTime(dateObj.getTime() + 6 * 60 * 60 * 1000)
         res.send({
             status: "success",
             message: "Get bill success",
-            bill: bill 
+            bill: {
+                id: bill.id,
+                taoboi: nhanvientao.ten,
+                ban: bill.BanId,
+                thanhtoanboi: bill.thanhtoanboi,
+                createdAt: dateObj.toUTCString(),
+                updatedAt: bill.updatedAt,
+                gia: bill.gia
+            } 
         })
 
     } catch (error) {
