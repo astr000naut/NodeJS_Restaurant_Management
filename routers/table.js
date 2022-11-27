@@ -1,4 +1,5 @@
 const express = require('express')
+const sequelize = require('../db')
 const {Ban, Khuvuc} = require('../models/models')
 
 
@@ -45,6 +46,47 @@ router.get('/getall', async (req, res) => {
             status: "success",
             message: "Get table list success",
             tables: allTable
+        })
+
+    } catch (error) {
+        res.send({
+            status: "fail",
+            message: error,
+            tables: {}
+        })
+    }
+})
+
+router.post('/filter', async (req, res) => {
+    try {
+        console.log(req.body)
+        let querytrangthai = '';
+        switch (req.body.trangthai) {
+            case "trong":
+                querytrangthai = '"hoadonht" = -1'
+                break;
+            case "dangphucvu":
+                querytrangthai = '"hoadonht" != -1'
+                break;
+            default:
+                querytrangthai = '"hoadonht" IS NOT NULL'
+                break;
+        }
+        let querykhuvuc = `"khuvuc"='${req.body.khuvuc}'`
+        if (req.body.khuvuc == "Tất cả") 
+            querykhuvuc = `"khuvuc" IS NOT NULL`
+
+        let querysocho = `"socho"=${req.body.socho}`
+        if (req.body.socho == "Tất cả") 
+            querysocho = `"socho" IS NOT NULL` 
+        
+        let [table_list, metadata] = await sequelize.query(
+            `SELECT "id", "khuvuc", "socho", "hoadonht" FROM "Bans" WHERE ${querykhuvuc} AND ${querysocho} AND ${querytrangthai};`
+        )
+        res.send({
+            status: "success",
+            message: "Get table success",
+            tables: table_list
         })
 
     } catch (error) {

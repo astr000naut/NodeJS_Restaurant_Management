@@ -8,10 +8,15 @@ const router = express.Router()
 router.get('/getall', async (req, res) => {
     try {
         let allArea = await Khuvuc.findAll();
+        let areas = []
+        allArea.forEach(area => {
+            areas.push(area.khuvuc)
+        })
+        areas.push("Tất cả")
         res.send({
             status: "success",
             message: "Get area list success",
-            areas: allArea
+            areas: areas
         })
 
     } catch (error) {
