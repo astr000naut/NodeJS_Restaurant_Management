@@ -103,7 +103,10 @@ const Khuvuc = sequelize.define('Khuvuc', {
 const HoadonMon = sequelize.define('HoadonMon', {
     soluongmon: DataTypes.INTEGER,
     ghichu: DataTypes.STRING,
-    trangthai: DataTypes.STRING
+    trangthai: DataTypes.STRING,
+    ban: DataTypes.INTEGER,
+    tenmon: DataTypes.STRING,
+    gia: DataTypes.INTEGER
 },{
     timestamps: true
 })

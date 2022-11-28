@@ -40,24 +40,28 @@ router.post('/adddish', async (req, res) => {
         console.log(dishes);
         let hoadonmonId = []
         let tong_gia = 0
+        let hoadon = await Hoadon.findOne({
+            where: {
+                id: req.body.bill_id
+            }
+        })
         for (let i = 0; i < dishes.length; ++ i) {
             let hoadonmon = await HoadonMon.create({
                 soluongmon: dishes[i].soluong,
                 ghichu: dishes[i].ghichu,
                 trangthai: dishes[i].trangthai,
                 MonId: dishes[i].id,
-                HoadonId: req.body.bill_id
+                HoadonId: req.body.bill_id,
+                ban: hoadon.BanId,
+                tenmon: dishes[i].ten,
+                gia: dishes[i].gia * dishes[i].soluong
             })
-            tong_gia += dishes[i].gia
+            tong_gia += hoadonmon.gia
             await hoadonmon.save()
             hoadonmonId.push(hoadonmon.id)
         }
-        let hoadon = await Hoadon.findOne({
-            where: {
-                id: req.body.bill_id
-            }
-        })
-        hoadon.gia = tong_gia
+        
+        hoadon.gia += tong_gia
         await hoadon.save()
         res.send({
             status: "success",
@@ -99,7 +103,8 @@ router.get('/getone', async (req, res) => {
                 thanhtoanboi: bill.thanhtoanboi,
                 createdAt: dateObj.toUTCString(),
                 updatedAt: bill.updatedAt,
-                gia: bill.gia
+                gia: bill.gia,
+                
             } 
         })
 
@@ -120,18 +125,12 @@ router.get('/getalldish', async (req, res) => {
                 HoadonId: req.query.id
             }
         })
-        let hoadon = await Hoadon.findOne({
-            where: {
-                id: req.query.id
-            }
-        })
         for (let i = 0; i < hoadonmon.length; ++ i) {
-            let mon = await Mon.findOne({where: {id: hoadonmon[i].MonId}})
             let bpdish = {
                 id: hoadonmon[i].id,
-                ban: hoadon.BanId,
-                ten: mon.ten,
-                gia: hoadonmon[i].soluongmon * mon.gia,
+                ban: hoadonmon[i].ban,
+                ten: hoadonmon[i].tenmon,
+                gia: hoadonmon[i].gia,
                 soluong: hoadonmon[i].soluongmon,
                 ghichu: hoadonmon[i].ghichu,
                 trangthai: hoadonmon[i].trangthai,
@@ -164,9 +163,21 @@ router.put('/updatebpdish', async (req, res) => {
                 id: req.body.bp_dish_id
             }
         })
+        let hoadon = await Hoadon.findOne({
+            where: {
+                id: bp_dish.HoadonId
+            }
+        })
         if (req.body.type == "capnhat") {
+            let bp_dish_old_price = bp_dish.gia
+            let giamon = Math.round(bp_dish.gia / bp_dish.soluongmon)
             bp_dish.soluongmon = req.body.soluong
+            bp_dish.gia = bp_dish.soluongmon * giamon
             bp_dish.ghichu = req.body.ghichu
+
+            hoadon.gia += (bp_dish.gia - bp_dish_old_price)
+            await hoadon.save()
+
             await bp_dish.save()
 
             res.send({
@@ -175,6 +186,8 @@ router.put('/updatebpdish', async (req, res) => {
             })
         }
         if (req.body.type == "xoa") {
+            hoadon.gia -= bp_dish.gia
+            await hoadon.save()
             await bp_dish.destroy()
             res.send({
                 status: "success",
