@@ -7,6 +7,7 @@ const areaRouter = require('./routers/khuvuc')
 const socket = require('socket.io')
 
 const dishHandler = require('./socketHandler/dishHandler')
+const billHandler = require('./socketHandler/billHandler')
 
 const app = express();
 const PORT = 3000
@@ -33,7 +34,8 @@ const server = app.listen(PORT, ()  => {
 const io = socket(server);
 
 const onConnection = (socket) => {
-    dishHandler(io, socket);
+    dishHandler(io, socket)
+    billHandler(io, socket)
     console.log("CLIENTS COUNT")
     console.log(io.engine.clientsCount)
 }

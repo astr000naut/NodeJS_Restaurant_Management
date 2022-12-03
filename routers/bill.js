@@ -1,5 +1,7 @@
 const express = require('express')
+const { Sequelize } = require('sequelize')
 const {Hoadon, Ban, HoadonMon, Mon, Nhanvien} = require('../models/models')
+const Op = Sequelize.Op
 
 
 const router = express.Router()
@@ -113,6 +115,59 @@ router.get('/getone', async (req, res) => {
             status: "fail",
             message: error,
             bill: {}
+        })
+    }
+})
+
+router.get('/filter', async (req, res) => {
+    try {
+        
+        console.log(req.query)
+        let fDate = new Date(`${req.query.fy}-${req.query.fm}-${req.query.fd}`)
+        let tDate = new Date(`${req.query.ty}-${req.query.tm}-${req.query.td}`)
+        fDate.setHours(7)
+        tDate.setHours(31)
+        console.log(fDate.toISOString())
+        let billList = await Hoadon.findAll({
+            where: {
+                createdAt: {
+                    [Op.gte]: fDate.toISOString(),
+                    [Op.lte]: tDate.toISOString()
+                },
+ 
+            }
+        })
+        let billListResponse = []
+        for (let i = 0; i < billList.length; ++ i) {
+            if (billList[i].thanhtoanboi == "done") {
+                let nv = await Nhanvien.findOne({
+                    where: {
+                        id: billList[i].taoboi
+                    }
+                })
+                billListResponse.push({
+                    id: billList[i].id,
+                    taoboi: nv.ten,
+                    ban: billList[i].BanId,
+                    thanhtoanboi: "",
+                    createdAt: billList[i].createdAt,
+                    updatedAt: billList[i].updatedAt,
+                    gia: billList[i].gia,
+                })
+            }
+        }
+        console.log(billListResponse)
+        res.send({
+            status: "success",
+            message: "Filter bill success",
+            bills: billListResponse
+        })
+
+    } catch (error) {
+        res.send({
+            status: "fail",
+            message: error,
+            bills: billListResponse
         })
     }
 })
