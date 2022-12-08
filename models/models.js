@@ -44,6 +44,11 @@ const Nhanvien = sequelize.define('Nhanvien', {
 });
 
 const Ban = sequelize.define('Ban', {
+    id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true
+    },
     khuvuc: {
         type: DataTypes.STRING,
         allowNull: false
@@ -95,6 +100,18 @@ const Khuvuc = sequelize.define('Khuvuc', {
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true
+    },
+    soban2: {
+        type: DataTypes.INTEGER
+    },
+    soban4: {
+        type: DataTypes.INTEGER
+    },
+    soban6: {
+        type: DataTypes.INTEGER
+    },
+    soban8: {
+        type: DataTypes.INTEGER
     }
 }, {
     timestamps: false
