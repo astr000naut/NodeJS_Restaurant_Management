@@ -71,6 +71,7 @@ router.post('/adddish', async (req, res) => {
             hoadonmonId: hoadonmonId
         })
     } catch (error) {
+        console.log(error)
         res.send({
             status: "fail",
             message: error,
@@ -87,11 +88,7 @@ router.get('/getone', async (req, res) => {
                 id: req.query.id
             }
         })
-        let nhanvientao = await Nhanvien.findOne({
-            where:{
-                id: bill.taoboi
-            }
-        })
+       
         let date = bill.createdAt
         let dateObj = new Date(date)
         dateObj.setTime(dateObj.getTime() + 6 * 60 * 60 * 1000)
@@ -100,7 +97,7 @@ router.get('/getone', async (req, res) => {
             message: "Get bill success",
             bill: {
                 id: bill.id,
-                taoboi: nhanvientao.ten,
+                taoboi: bill.taoboi,
                 ban: bill.BanId,
                 thanhtoanboi: bill.thanhtoanboi,
                 createdAt: dateObj.toUTCString(),
@@ -140,14 +137,9 @@ router.get('/filter', async (req, res) => {
         let billListResponse = []
         for (let i = 0; i < billList.length; ++ i) {
             if (billList[i].thanhtoanboi == "done") {
-                let nv = await Nhanvien.findOne({
-                    where: {
-                        id: billList[i].taoboi
-                    }
-                })
                 billListResponse.push({
                     id: billList[i].id,
-                    taoboi: nv.ten,
+                    taoboi: billList[i].taoboi,
                     ban: billList[i].BanId,
                     thanhtoanboi: "",
                     createdAt: billList[i].createdAt,

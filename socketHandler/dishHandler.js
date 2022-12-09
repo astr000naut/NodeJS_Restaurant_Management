@@ -20,16 +20,17 @@ module.exports = (io, socket) => {
         console.log(status)
         console.log(hoadonmon.HoadonId)
         io.emit('st_c_pv', hoadonmon.HoadonId)
-        
     }
 
-    const dish_update_pv = (type, id, soluong, ghichu) => {
+    const dish_update_pv = async (type, id, soluong, ghichu, tableid) => {
         console.log("DISH UPDATE SOCKET RECEIVED")
         console.log(type)
         console.log(id)
         console.log(soluong)
         console.log(ghichu)
+        
         io.emit('dish_update_bep', type, id, soluong, ghichu)
+        io.emit('dish_update_tn', tableid)
         console.log("EMITTED")
     }
 

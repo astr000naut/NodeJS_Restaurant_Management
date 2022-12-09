@@ -67,7 +67,7 @@ const Ban = sequelize.define('Ban', {
 
 const Hoadon = sequelize.define('Hoadon', {
     taoboi: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     thanhtoanboi: {
@@ -121,7 +121,7 @@ const HoadonMon = sequelize.define('HoadonMon', {
     soluongmon: DataTypes.INTEGER,
     ghichu: DataTypes.STRING,
     trangthai: DataTypes.STRING,
-    ban: DataTypes.INTEGER,
+    ban: DataTypes.STRING,
     tenmon: DataTypes.STRING,
     gia: DataTypes.INTEGER
 },{
