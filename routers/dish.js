@@ -26,6 +26,32 @@ router.post('/add', async (req, res) => {
     }
 })
 
+router.delete('/delete/:id', async (req, res) => {
+    try {
+        
+        console.log(req.params.id)
+        let dish = await Mon.findOne({
+            where: {
+                id: req.params.id
+            }
+        })
+        if (dish != null) {
+            await dish.destroy()
+        }
+        res.send({
+            status: "success",
+            message: "Deleted dish",
+        
+        })
+    } catch (error) {
+        res.send({
+            status: "fail",
+            message: error,
+            dish: {}
+        })
+    }
+})
+
 router.get('/getall', async (req, res) => {
     try {
         let allDish = await Mon.findAll();

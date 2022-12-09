@@ -44,6 +44,11 @@ const Nhanvien = sequelize.define('Nhanvien', {
 });
 
 const Ban = sequelize.define('Ban', {
+    id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true
+    },
     khuvuc: {
         type: DataTypes.STRING,
         allowNull: false
@@ -62,7 +67,7 @@ const Ban = sequelize.define('Ban', {
 
 const Hoadon = sequelize.define('Hoadon', {
     taoboi: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     thanhtoanboi: {
@@ -95,6 +100,18 @@ const Khuvuc = sequelize.define('Khuvuc', {
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true
+    },
+    soban2: {
+        type: DataTypes.INTEGER
+    },
+    soban4: {
+        type: DataTypes.INTEGER
+    },
+    soban6: {
+        type: DataTypes.INTEGER
+    },
+    soban8: {
+        type: DataTypes.INTEGER
     }
 }, {
     timestamps: false
@@ -104,7 +121,7 @@ const HoadonMon = sequelize.define('HoadonMon', {
     soluongmon: DataTypes.INTEGER,
     ghichu: DataTypes.STRING,
     trangthai: DataTypes.STRING,
-    ban: DataTypes.INTEGER,
+    ban: DataTypes.STRING,
     tenmon: DataTypes.STRING,
     gia: DataTypes.INTEGER
 },{
