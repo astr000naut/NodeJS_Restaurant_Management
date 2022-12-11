@@ -91,7 +91,7 @@ router.get('/getone', async (req, res) => {
        
         let date = bill.createdAt
         let dateObj = new Date(date)
-        dateObj.setTime(dateObj.getTime() + 6 * 60 * 60 * 1000)
+        dateObj.setTime(dateObj.getTime() + 7 * 60 * 60 * 1000)
         res.send({
             status: "success",
             message: "Get bill success",
