@@ -1,9 +1,10 @@
 const {HoadonMon} = require('../models/models')
 module.exports = (io, socket) => {
-    const dish_list = (dish_list) => {
+    const dish_list = (dish_list, table_id) => {
         console.log("SOCKET IO RECEIVED DATA")
         console.log(dish_list)
         io.emit('dish_list_bep', dish_list)
+        io.emit('bill_add_dish_tn', table_id)
     }
 
     const dish_state_change = async (id, status) => {

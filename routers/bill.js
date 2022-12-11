@@ -137,12 +137,15 @@ router.get('/filter', async (req, res) => {
         let billListResponse = []
         for (let i = 0; i < billList.length; ++ i) {
             if (billList[i].thanhtoanboi == "done") {
+                let date = billList[i].createdAt
+                let dateObj = new Date(date)
+                dateObj.setTime(dateObj.getTime() + 7 * 60 * 60 * 1000)
                 billListResponse.push({
                     id: billList[i].id,
                     taoboi: billList[i].taoboi,
                     ban: billList[i].BanId,
                     thanhtoanboi: "",
-                    createdAt: billList[i].createdAt,
+                    createdAt: dateObj.toUTCString(),
                     updatedAt: billList[i].updatedAt,
                     gia: billList[i].gia,
                 })
