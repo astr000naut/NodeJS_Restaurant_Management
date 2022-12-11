@@ -24,7 +24,7 @@ router.post('/create', async (req, res) => {
         await ban.save();
         res.send({
             status: "success",
-            message: "Created new bill",
+            message: "Tạo mới hóa đơn thành công",
             bill: newBill
         })
     } catch (error) {
@@ -67,7 +67,7 @@ router.post('/adddish', async (req, res) => {
         await hoadon.save()
         res.send({
             status: "success",
-            message: "Add dish success",
+            message: "Thêm mới món thành công",
             hoadonmonId: hoadonmonId
         })
     } catch (error) {
@@ -94,7 +94,7 @@ router.get('/getone', async (req, res) => {
         dateObj.setTime(dateObj.getTime() + 7 * 60 * 60 * 1000)
         res.send({
             status: "success",
-            message: "Get bill success",
+            message: "Lấy hóa đơn thành công",
             bill: {
                 id: bill.id,
                 taoboi: bill.taoboi,
@@ -151,7 +151,7 @@ router.get('/filter', async (req, res) => {
         console.log(billListResponse)
         res.send({
             status: "success",
-            message: "Filter bill success",
+            message: "Tìm kiếm hóa đơn thành công",
             bills: billListResponse
         })
 
@@ -188,7 +188,7 @@ router.get('/getalldish', async (req, res) => {
     
         res.send({
             status: "success",
-            message: "Get bill's bp dishes success",
+            message: "Lấy danh sách món của hóa đơn thành công",
             bp_dishes: bpdish_list
         })
 
@@ -229,7 +229,7 @@ router.put('/updatebpdish', async (req, res) => {
 
             res.send({
                 status: "success",
-                message: "Update bill's bp dish success"
+                message: "Cập nhật món cho hóa đơn thành công"
             })
         }
         if (req.body.type == "xoa") {
@@ -238,7 +238,7 @@ router.put('/updatebpdish', async (req, res) => {
             await bp_dish.destroy()
             res.send({
                 status: "success",
-                message: "Delete bill's bp dish success"
+                message: "Hủy món thành công"
             })
         }
 

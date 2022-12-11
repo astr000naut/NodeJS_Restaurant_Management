@@ -44,7 +44,7 @@ router.get('/getall', async (req, res) => {
         let allTable = await Ban.findAll();
         res.send({
             status: "success",
-            message: "Get table list success",
+            message: "Lấy danh sách bàn thành công",
             tables: allTable
         })
 
@@ -85,7 +85,7 @@ router.post('/filter', async (req, res) => {
         )
         res.send({
             status: "success",
-            message: "Get table success",
+            message: "Lấy bàn thành công",
             tables: table_list
         })
 

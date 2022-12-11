@@ -10,7 +10,7 @@ router.get('/getall', async (req, res) => {
         let allArea = await Khuvuc.findAll();
         res.send({
             status: "success",
-            message: "Get area list success",
+            message: "Lấy danh sách khu vực thành công",
             areas: allArea
         })
 
@@ -32,7 +32,7 @@ router.post('/create', async (req, res) => {
             }
         })
         if (oldKhuvuc != null) {
-            throw "This area has been existed"
+            throw "Khu vực này đã tồn tại"
         } else {
             console.log(req.body)
             let newKhuvuc = await Khuvuc.create({
@@ -87,7 +87,7 @@ router.post('/create', async (req, res) => {
             }
             res.send({
                 status: "success",
-                message: "Create area success",
+                message: "Tạo mới khu vực thành công",
             })
         }
     } catch (error) {
@@ -121,12 +121,12 @@ router.post('/delete', async (req, res) => {
          
             res.send({
                 status: "success",
-                message: "Delete area success",
+                message: "Xóa khu vực thành công",
             })
         } else {
             res.send({
                 status: "success",
-                message: "This area not exist"
+                message: "Khu vực này không tồn tại"
             })
         }
 

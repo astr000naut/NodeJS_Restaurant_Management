@@ -8,30 +8,30 @@ const router = express.Router()
 
 router.post('/login', async (req, res) => {
     try {
-        let user = await Nhanvien.findAll({
+        let user = await Nhanvien.findOne({
             where: {
                 username: req.body.username
             }
         })
-        if (user.length > 0) {
-            let password = user[0].password;
+        if (user != null) {
+            let password = user.password;
             if (password == req.body.password) {
                 res.send({
                     status: "success",
-                    message: "Login success",
-                    user: user[0]
+                    message: "Đăng nhập thành công",
+                    user: user
                 })
             } else {
                 res.send({
                     status: "fail",
-                    message: "Wrong username or password",
+                    message: "Sai tên đăng nhập hoặc mật khẩu",
                     user: {}
                 })
             }
         } else {
             res.send({
                 status: "fail",
-                message: "Wrong username or password",
+                message: "Sai tên đăng nhập hoặc mật khẩu",
                 user: {}
             })
         }
@@ -49,7 +49,7 @@ router.post('/create', async (req, res) => {
         if (user.length > 0) {
             res.status(400).send({
                 status: "fail",
-                message: "Username existed",
+                message: "Tên đăng nhập này đã tồn tại",
                 user: []
             })
         } else {
@@ -67,7 +67,7 @@ router.post('/create', async (req, res) => {
             await newUser.save();
             res.send({
                 status: "success",
-                message: "Created new user",
+                message: "Tạo mới tài khoản thành công",
                 user: req.body
             })
         }
@@ -92,7 +92,7 @@ router.get('/getallpersonnel', async (req, res) => {
         })
         res.send({
             status: "success",
-            message: "Get all personnel success",
+            message: "Lấy danh sách nhân viên thành công",
             users: userList
         })
 
@@ -119,7 +119,7 @@ router.put('/update', async (req, res) => {
         })
         if (req.body.oldpass != "") {
             if (req.body.oldpass != user.password) 
-                throw "Wrong password"
+                throw "Sai mật khẩu"
             user.ten = req.body.ten
             user.tuoi = req.body.tuoi
             user.sdt = req.body.sdt
@@ -137,7 +137,7 @@ router.put('/update', async (req, res) => {
         }
         res.send({
             status: "success",
-            message: "Update user success",
+            message: "Cập nhật thông tin thành công",
             users: [user]
         })
     } catch (error) {
@@ -159,7 +159,7 @@ router.delete('/delete/:id', async (req, res) => {
           });
         res.send({
             status: "success",
-            message: "Delete user success",
+            message: "Xóa tài khoản thành công",
         })
     } catch (error) {
         res.status(400).send({

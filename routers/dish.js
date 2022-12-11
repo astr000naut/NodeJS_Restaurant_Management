@@ -14,7 +14,7 @@ router.post('/add', async (req, res) => {
         await newDish.save();
         res.send({
             status: "success",
-            message: "Created new dish",
+            message: "Tạo mới món ăn thành công",
             dish: newDish
         })
     } catch (error) {
@@ -40,7 +40,7 @@ router.delete('/delete/:id', async (req, res) => {
         }
         res.send({
             status: "success",
-            message: "Deleted dish",
+            message: "Xóa món thành công",
         
         })
     } catch (error) {
@@ -57,7 +57,7 @@ router.get('/getall', async (req, res) => {
         let allDish = await Mon.findAll();
         res.send({
             status: "success",
-            message: "Get dish list success",
+            message: "Lấy danh sách món ăn thành công",
             dishes: allDish
         })
 
@@ -92,7 +92,7 @@ router.get('/getunfinished', async (req, res) => {
         }
         res.send({
             status: "success",
-            message: "Get unfinished bp dish list success",
+            message: "Lấy danh sách món chưa làm thành công",
             bp_dishes: bp_dishe_list
         })
 
