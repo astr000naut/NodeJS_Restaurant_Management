@@ -22,7 +22,9 @@ module.exports = (io, socket) => {
         hoadon.thanhtoanboi = "done"
         await ban.save()
         await hoadon.save()
-        io.emit('bill_done_pv', tableId)    
+        console.log("EMIT" + tableId);
+        io.emit('bill_done_pv', tableId) 
+        io.emit('bill_done_pv_tl', 1)   
     }
 
     socket.on('bill_created_pv', bill_created_pv)
